@@ -24,15 +24,15 @@ def request_handler(env, start_response):
     client = PwdPasswordClient(URL)
 
     try:
-        result = client.check_password(password)
+        leaks = client.check_password(password)
     except Exception as e:
         start_response("502 Bad Gateway", headers)
         return []
 
     start_response("200 OK", headers)
 
-    if result:
-        return [f"Password leaked in {result} sites.".encode(ENCODING)]
+    if leaks:
+        return [f"Password leaked in {leaks} sites.".encode(ENCODING)]
     return ["Password is save".encode(ENCODING)]
 
 
