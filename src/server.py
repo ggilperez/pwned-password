@@ -12,9 +12,10 @@ QUERY_PARAM = "password"
 def request_handler(env, start_response):
     headers = [("Content-Type", "text/plain")]
 
+    # Get queryset params
     queryset = parse.parse_qs(env.get("QUERY_STRING"))
 
-    # If no password given, return 400 Bad Request
+    # If no password given in queryset, return 400 Bad Request
     if not queryset:
         start_response("400 Bad Request", headers)
         return []
