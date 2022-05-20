@@ -6,6 +6,7 @@ from pwd_password_client import PwdPasswordClient
 ENCODING = "UTF-8"
 QUERY_PARAM = "password"
 
+
 def request_handler(env, start_response):
     headers = [("Content-Type", "text/plain")]
 
