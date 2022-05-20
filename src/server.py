@@ -1,5 +1,6 @@
 from urllib import parse
 from wsgiref.simple_server import make_server
+
 from pwd_password_client import PwdPasswordClient
 
 # CONSTANTS
