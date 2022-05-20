@@ -1,4 +1,4 @@
-import urllib.request
+from urllib import request
 import posixpath
 
 from hashlib import sha1
@@ -34,7 +34,7 @@ class PwdPasswordClient(object):
         # Build URL with sha1
         URL = posixpath.join(self.__URL, self.__get_sha1_pass_prefix(pwd_sha1))
 
-        response = urllib.request.urlopen(URL)
+        response = request.urlopen(URL)
 
         if response.status != 200:
             raise Exception(f"{response.status_code} {response.text}")
