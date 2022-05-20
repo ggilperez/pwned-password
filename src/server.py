@@ -4,6 +4,7 @@ from wsgiref.simple_server import make_server
 from pwd_password_client import PwdPasswordClient
 
 # CONSTANTS
+URL = "https://api.pwnedpasswords.com/range"
 ENCODING = "UTF-8"
 QUERY_PARAM = "password"
 
@@ -20,7 +21,7 @@ def request_handler(env, start_response):
 
     # Get password from queryset
     password = queryset[QUERY_PARAM][0]
-    client = PwdPasswordClient("https://api.pwnedpasswords.com/range")
+    client = PwdPasswordClient(URL)
 
     try:
         result = client.check_password(password)
