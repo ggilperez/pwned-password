@@ -8,6 +8,7 @@ class PwdPasswordClient(object):
     # CONSTANTS
     PREFIX_INDEX = 5
     ENCODING = "UTF-8"
+    TIMEOUT = 10
 
     def __init__(self, url: str):
         self.__URL = url
@@ -34,7 +35,7 @@ class PwdPasswordClient(object):
         # Build URL with sha1
         URL = posixpath.join(self.__URL, self.__get_sha1_pass_prefix(pwd_sha1))
 
-        response = request.urlopen(URL)
+        response = request.urlopen(URL, timeout=self.TIMEOUT)
 
         if response.status != 200:
             raise Exception(f"{response.status_code} {response.text}")
