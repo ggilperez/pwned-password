@@ -35,9 +35,19 @@ def request_handler(env, start_response):
     return build_response(HTTPStatus.OK, "Password is save", headers, start_response)
 
 
-def build_response(status_code, message, headers, start_response):
+def build_response(status_code: int, message: str, headers: list, start_response) -> List[bytes]:
+    """
+    Builds an http response
+    Args:
+        status_code(http.HTTPStatus):
+            value(int): status code
+            phrase(str): status nicename
+        message(str): msg to return in response
+        headers(list): list of headers
+        start_response(method): wsgiref response handler
+    """
     start_response(f"{status_code.value} {status_code.phrase}", headers)
-    return [message.encode(ENCODING)]
+    return [bytes(message.encode(config["encoding"]))]
 
 
 server = make_server("localhost", 8000, request_handler)
