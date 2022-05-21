@@ -7,7 +7,15 @@ from configs.base import config
 from pwd_password_client import PwdPasswordClient
 
 
-def request_handler(env, start_response):
+def request_handler(env, start_response) -> List[bytes]:
+    """
+    Server method
+    Args:
+        env: environment variables + request data
+        start_response: response handler method
+    Returns:
+        List[bytes]: return a byte array, with encoding message
+    """
     headers = [("Content-Type", "text/plain")]
 
     # Get queryset params
@@ -43,6 +51,8 @@ def build_response(status_code: int, message: str, headers: list, start_response
         message(str): msg to return in response
         headers(list): list of headers
         start_response(method): wsgiref response handler
+    Returns:
+        List[bytes]: return a byte array, with encoding message
     """
     start_response(f"{status_code.value} {status_code.phrase}", headers)
     return [bytes(message.encode(config["encoding"]))]

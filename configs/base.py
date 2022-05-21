@@ -6,5 +6,5 @@ config = {
     "param": "password",
     "encoding": "UTF-8",
     "timeout": 10,
-    "prefix_index": 5,
+    "prefix_length": 5,
 }
