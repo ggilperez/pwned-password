@@ -130,3 +130,6 @@ dmypy.json
 
 # OS Stuff
 .DS_Store
+
+# IDE Stuff
+.idea
