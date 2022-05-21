@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from urllib import parse
 from wsgiref.simple_server import make_server
 
@@ -17,8 +18,7 @@ def request_handler(env, start_response):
 
     # If no password given in queryset, return 400 Bad Request
     if not queryset:
-        start_response("400 Bad Request", headers)
-        return []
+        return build_response(HTTPStatus.BAD_REQUEST, f"{QUERY_PARAM} param at queryset needed.", headers, start_response)
 
     # Get password from queryset
     password = queryset[QUERY_PARAM][0]
@@ -27,14 +27,17 @@ def request_handler(env, start_response):
     try:
         leaks = client.check_password(password)
     except Exception as e:
-        start_response("502 Bad Gateway", headers)
-        return []
-
-    start_response("200 OK", headers)
+        return build_response(HTTPStatus.BAD_GATEWAY, "", headers, start_response)
 
     if leaks:
-        return [f"Password leaked in {leaks} sites.".encode(ENCODING)]
-    return ["Password is save".encode(ENCODING)]
+        return build_response(HTTPStatus.OK, f"Password leaked in {leaks} sites.", headers, start_response)
+        
+    return build_response(HTTPStatus.OK, "Password is save", headers, start_response)
+
+
+def build_response(status_code, message, headers, start_response):
+    start_response(f"{status_code.value} {status_code.phrase}", headers)
+    return [message.encode(ENCODING)]
 
 
 server = make_server("localhost", 8000, request_handler)
