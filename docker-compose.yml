@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  api:
+    build: .
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: python3 /app/pwned_password/src/server.py
+
+  webserver:
+    image: nginx:latest
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/

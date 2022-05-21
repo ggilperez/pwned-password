@@ -1,7 +1,13 @@
+import sys
+import os
+
 from http import HTTPStatus
 from typing import List
 from urllib import parse
 from wsgiref.simple_server import make_server
+
+# Add Parent Package to prevent import error
+sys.path.insert(1,os.path.join(os.path.dirname(__file__), ".."))
 
 from configs.base import config
 from pwd_password_client import PwdPasswordClient
