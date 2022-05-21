@@ -1,7 +1,6 @@
-from urllib import request
 import posixpath
-
 from hashlib import sha1
+from urllib import request
 
 
 class PwdPasswordClient(object):
