@@ -1,13 +1,10 @@
 from http import HTTPStatus
+from typing import List
 from urllib import parse
 from wsgiref.simple_server import make_server
 
+from configs.base import config
 from pwd_password_client import PwdPasswordClient
-
-# CONSTANTS
-URL = "https://api.pwnedpasswords.com/range"
-ENCODING = "UTF-8"
-QUERY_PARAM = "password"
 
 
 def request_handler(env, start_response):
@@ -18,11 +15,12 @@ def request_handler(env, start_response):
 
     # If no password given in queryset, return 400 Bad Request
     if not queryset:
-        return build_response(HTTPStatus.BAD_REQUEST, f"{QUERY_PARAM} param at queryset needed.", headers, start_response)
+        return build_response(
+            HTTPStatus.BAD_REQUEST, f'{config["param"]} param at queryset needed.', headers, start_response)
 
     # Get password from queryset
-    password = queryset[QUERY_PARAM][0]
-    client = PwdPasswordClient(URL)
+    password = queryset[config["param"]][0]
+    client = PwdPasswordClient(config["url"])
 
     try:
         leaks = client.check_password(password)
@@ -31,7 +29,7 @@ def request_handler(env, start_response):
 
     if leaks:
         return build_response(HTTPStatus.OK, f"Password leaked in {leaks} sites.", headers, start_response)
-        
+
     return build_response(HTTPStatus.OK, "Password is save", headers, start_response)
 
 
@@ -50,5 +48,7 @@ def build_response(status_code: int, message: str, headers: list, start_response
     return [bytes(message.encode(config["encoding"]))]
 
 
-server = make_server("localhost", 8000, request_handler)
-server.serve_forever()
+if __name__ == "__main__":
+    with make_server(config["host"], config["port"], request_handler) as server:
+        print(f'Serving on port {config["port"]}...')
+        server.serve_forever()
