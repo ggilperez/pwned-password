@@ -22,7 +22,7 @@ def request_handler(env, start_response) -> List[bytes]:
     queryset = parse.parse_qs(env.get("QUERY_STRING"))
 
     # If no password given in queryset, return 400 Bad Request
-    if not queryset:
+    if not queryset or queryset.get(config["param"]) is None:
         return build_response(
             HTTPStatus.BAD_REQUEST, f'{config["param"]} param at queryset needed.', headers, start_response)
 
